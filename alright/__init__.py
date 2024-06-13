@@ -481,9 +481,11 @@ class WhatsApp(object):
                 time.sleep(timeout)
             input_box.send_keys(Keys.ENTER)
             LOGGER.info(f"Message sent successfuly to {self.mobile}")
+            return True
         except (NoSuchElementException, Exception) as bug:
             LOGGER.exception(f"Failed to send a message to {self.mobile} - {bug}")
             LOGGER.info("send_message() finished running!")
+        return False
 
     def send_direct_message(self, mobile: str, message: str, saved: bool = True):
         if saved:
