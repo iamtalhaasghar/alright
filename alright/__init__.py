@@ -468,7 +468,12 @@ class WhatsApp(object):
                 EC.presence_of_element_located((By.XPATH, inp_xpath))
             )
             for line in message.split("\n"):
-                input_box.send_keys(line)
+                # mimick human like typing behaviour
+                for word in line.split():
+                    input_box.send_keys(word)
+                    input_box.send_keys(Keys.SPACE)
+                    time.sleep(1)
+
                 ActionChains(self.browser).key_down(Keys.SHIFT).key_down(
                     Keys.ENTER
                 ).key_up(Keys.ENTER).key_up(Keys.SHIFT).perform()
