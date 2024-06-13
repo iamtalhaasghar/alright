@@ -140,11 +140,21 @@ class WhatsApp(object):
             self.mobile = mobile
             link = self.get_phone_link(mobile)
             self.browser.get(link)
-            time.sleep(3)
+            # check if user profile exists or not
+            nr_xpath = '//*[@id="main"]/header/div[2]/div/div/div/span'
+            nr_not_found_xpath = '//*[@id="app"]/div/span[2]/div/span/div/div/div/div/div/div[2]/div/button'
+
+            ctrl_element = self.wait.until(
+                lambda ctrl_self: ctrl_self.find_elements(By.XPATH, nr_not_found_xpath)
+                or ctrl_self.find_elements(By.XPATH, nr_xpath)
+            )[0]
+            if ctrl_element.tag_name == 'span': # user does exists and the span will have the number of the user
+                return True
         except UnexpectedAlertPresentException as bug:
             LOGGER.exception(f"An exception occurred: {bug}")
             time.sleep(1)
             self.find_user(mobile)
+        return False
 
     def find_by_username(self, username):
         """find_user_by_name ()
